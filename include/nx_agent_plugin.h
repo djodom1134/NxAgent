@@ -13,6 +13,7 @@ namespace nx_agent {
     class MetadataAnalyzer;
     class AnomalyDetector;
     class ResponseProtocol;
+    class NxAgentSystem;
     struct FrameAnalysisResult;
 }
 
@@ -39,15 +40,15 @@ public:
     virtual ~NxAgentEngine() override;
 
     virtual std::string manifestString() const override;
-    
+
 protected:
     virtual nx::sdk::analytics::IDeviceAgent* doCreateDeviceAgent(
         const nx::sdk::IDeviceInfo* deviceInfo) override;
-        
+
 private:
     // Mutex for thread-safe operations
     std::mutex m_engineMutex;
-    
+
     // Track active device agents
     std::map<std::string, nx::sdk::analytics::IDeviceAgent*> m_deviceAgents;
 };
@@ -61,44 +62,47 @@ public:
     virtual ~NxAgentDeviceAgent() override;
 
     virtual std::string manifestString() const override;
-    
+
 protected:
     virtual bool needUncompressedVideoFrame() const override { return true; }
     virtual bool needCompressedVideoFrame() const override { return false; }
-    
+
     virtual nx::sdk::Result<void> doSetupAnalytics(
         const nx::sdk::analytics::SetupAnalyticsModel& setupAnalyticsModel) override;
-        
+
     virtual nx::sdk::Result<nx::sdk::analytics::DetectionResult> processVideoFrame(
         const nx::sdk::analytics::VideoFrameProcessingRequest& request) override;
-    
+
     // Generate an event for an anomaly
     virtual void generateAnomalyEvent(const FrameAnalysisResult& result);
-    
+
     // Report detected objects to the VMS
     virtual void reportObjects(const FrameAnalysisResult& result);
-        
+
 protected:
     // Track device settings and state
     std::string m_deviceId;
     bool m_initialized = false;
-    
+
     // Configuration
     std::shared_ptr<DeviceConfig> m_config;
-    
+
     // Processing components
     std::unique_ptr<MetadataAnalyzer> m_metadataAnalyzer;
     std::unique_ptr<AnomalyDetector> m_anomalyDetector;
     std::unique_ptr<ResponseProtocol> m_responseProtocol;
-    
+
     // State variables
     bool m_isLearningMode = true;
     int m_learningFrameCount = 0;
     int64_t m_lastAnomalyTimeUs = 0;
-    
+
     // Statistics
     int m_processedFrameCount = 0;
     int m_anomalyCount = 0;
+
+    // AI agent system
+    std::shared_ptr<NxAgentSystem> m_system;
 };
 
 } // namespace nx_agent
