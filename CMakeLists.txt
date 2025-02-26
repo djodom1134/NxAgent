@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Find dependencies
 find_package(OpenCV REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(CURL REQUIRED)
 
 # Define paths to Nx SDK
 set(NX_SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/nx_sdk" CACHE PATH "Path to Nx SDK directory")
@@ -14,17 +15,26 @@ set(NX_SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/nx_sdk" CACHE PATH "Path to Nx SDK d
 # Include directories
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${NX_SDK_DIR}/include
     ${OpenCV_INCLUDE_DIRS}
+    ${CURL_INCLUDE_DIRS}
 )
 
 # Source files
 set(SOURCE_FILES
-    nx_agent_plugin.cpp
-    nx_agent_config.cpp
-    nx_agent_metadata.cpp
-    nx_agent_anomaly.cpp
-    nx_agent_main.cpp
+    src/nx_agent_plugin.cpp
+    src/nx_agent_config.cpp
+    src/nx_agent_metadata.cpp
+    src/nx_agent_anomaly.cpp
+    src/nx_agent_main.cpp
+    src/nx_agent_integrated.cpp
+    src/nx_agent_llm.cpp
+    src/nx_agent_strategy.cpp
+    src/nx_agent_reasoning.cpp
+    src/nx_agent_system.cpp
+    src/nx_agent_response.cpp
+    src/nx_agent_utils.cpp
 )
 
 # Create shared library (plugin)
@@ -34,6 +44,7 @@ add_library(nx_agent_plugin SHARED ${SOURCE_FILES})
 target_link_libraries(nx_agent_plugin
     ${OpenCV_LIBS}
     nlohmann_json::nlohmann_json
+    ${CURL_LIBRARIES}
     ${NX_SDK_DIR}/lib/libnx_sdk.a
 )
 
@@ -41,12 +52,12 @@ target_link_libraries(nx_agent_plugin
 if(WIN32)
     set_target_properties(nx_agent_plugin PROPERTIES OUTPUT_NAME "nx_agent_plugin.dll")
 elseif(APPLE)
-    set_target_properties(nx_agent_plugin PROPERTIES 
+    set_target_properties(nx_agent_plugin PROPERTIES
         OUTPUT_NAME "nx_agent_plugin.dylib"
         SUFFIX ""
     )
 else()
-    set_target_properties(nx_agent_plugin PROPERTIES 
+    set_target_properties(nx_agent_plugin PROPERTIES
         OUTPUT_NAME "nx_agent_plugin.so"
         SUFFIX ""
     )
