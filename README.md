@@ -1,4 +1,4 @@
-# NX Agent AI Security Guard Plugin
+# NX Agent AI Plugin
 
 A powerful AI-powered security monitoring system for Network Optix Nx Meta VMS. The plugin combines advanced video analytics with Large Language Model (LLM) capabilities to provide intelligent security monitoring, anomaly detection, and automated response planning.
 
