@@ -1,25 +1,37 @@
-# NX Agent AI Security Guard Plugin
+# NX Agent Supervisor
 
-A powerful AI-powered security monitoring system for Network Optix Nx Meta VMS. The plugin analyzes video metadata to detect anomalies and unusual conditions, bringing important security events to the forefront.
+A powerful AI-powered security monitoring system for Network Optix Nx Meta VMS. The plugin combines advanced video analytics with Large Language Model (LLM) capabilities to provide intelligent security monitoring, anomaly detection, and automated response planning.
 
 ## Features
 
+### Core Analytics
 - **Real-time Metadata Analysis**: Analyze video metadata from camera feeds to detect objects, motion patterns, and activities.
 - **Anomaly Detection**: Automatically learn normal patterns and detect deviations using statistical modeling and machine learning.
 - **Persistent Unknown Visitor Detection**: Identify and track unknown individuals who remain in a scene for extended periods.
 - **Suspicious Activity Recognition**: Detect unusual motion patterns, loitering in restricted areas, and other abnormal behaviors.
+
+### Advanced AI Capabilities
+- **LLM-Powered Reasoning**: Integration with Large Language Models for intelligent situation analysis and decision support.
+- **Cross-Camera Intelligence**: Track subjects across multiple cameras and correlate information for comprehensive situational awareness.
+- **Strategic Planning**: AI-driven security recommendations and response planning for detected threats.
+- **Cognitive Status Reports**: Regular insights into the system's understanding of the security situation.
+
+### System Integration
 - **VMS UI Integration**: Seamlessly integrate with Nx Meta's interface to display alerts and camera feeds when anomalies are detected.
 - **Automated Response Protocols**: Execute site-specific Standard Operating Procedures (SOPs) when threats are detected.
 - **Continuous Learning**: Adapt to the environment over time by learning normal behaviors and refining anomaly detection.
+- **Custom Goals**: Set and track specific security objectives through the AI system.
 
 ## System Requirements
 
 - Network Optix Nx Meta VMS 5.0 or higher
 - 64-bit Linux (Ubuntu 18.04/20.04 LTS recommended) or Windows 10/11/Server
-- 4GB RAM minimum (8GB+ recommended)
+- 8GB RAM minimum (16GB+ recommended for LLM integration)
 - x86-64 CPU with SSE4.2 support
 - OpenCV 4.2+ and its dependencies
-- 50MB free disk space for plugin, plus storage for models and configuration
+- CURL library for LLM API communication
+- 100MB free disk space for plugin, plus storage for models and configuration
+- Internet connection for LLM API access (if enabled)
 
 ## Installation
 
@@ -41,10 +53,10 @@ A powerful AI-powered security monitoring system for Network Optix Nx Meta VMS. 
 ```bash
 # Install dependencies
 sudo apt-get update
-sudo apt-get install -y build-essential cmake libopencv-dev nlohmann-json3-dev
+sudo apt-get install -y build-essential cmake libopencv-dev nlohmann-json3-dev libcurl4-openssl-dev
 
 # Clone repository
-git clone https://github.com/nx-agent/nx-agent-plugin.git
+https://github.com/djodom1134/NxAgent.git
 cd nx-agent-plugin
 
 # Create build directory
@@ -64,7 +76,7 @@ sudo make install
 1. Install Visual Studio 2019 or later with C++ development tools
 2. Install CMake 3.15 or higher
 3. Install OpenCV 4.2+ using vcpkg or pre-built binaries
-4. Install nlohmann-json using vcpkg
+4. Install nlohmann-json and CURL using vcpkg
 5. Open the project in Visual Studio and build the solution
 6. Copy the built DLL to the Nx Meta plugins directory
 
@@ -76,6 +88,15 @@ sudo make install
 2. Go to **Server Settings** > **Plugins**
 3. Find "NX Agent AI Security Guard" in the list and click the checkbox to enable it
 4. Click **Apply** to save changes
+
+### LLM Integration Setup
+
+1. Go to **Server Settings** > **Plugins** > **NX Agent** > **AI Settings**
+2. Configure LLM settings:
+   - Enable/disable LLM integration
+   - Set API key for chosen LLM service (Claude or GPT)
+   - Configure model parameters and reasoning intervals
+   - Set up cross-camera correlation options
 
 ### Camera Configuration
 
@@ -89,6 +110,7 @@ sudo make install
    - **Detection Regions**: Draw regions of interest to focus monitoring on specific areas
    - **Business Hours**: Set normal operational hours for your site
    - **Unknown Visitor Threshold**: Time in seconds before an unknown visitor is considered suspicious
+   - **AI Reasoning Settings**: Configure reasoning intervals and confidence thresholds
 
 ### Response Configuration
 
@@ -110,13 +132,15 @@ When first enabled on a camera, the plugin enters a learning phase to establish 
 
 The learning phase typically lasts 8-12 hours but can be extended for more complex environments. Once complete, the plugin automatically switches to detection mode.
 
-### Detection Mode
+### AI Reasoning System
 
-In detection mode, the plugin:
+The enhanced system provides:
 
-- Analyzes all video frames for anomalies
-- Generates events when unusual activity is detected
-- Continues to refine its model if continuous learning is enabled
+- Intelligent analysis of detected anomalies
+- Context-aware security recommendations
+- Predictive insights about potential threats
+- Cross-camera subject tracking and correlation
+- Regular cognitive status reports
 
 ### Events and Alerts
 
@@ -125,6 +149,7 @@ The plugin generates several types of events:
 - **Anomaly Detected**: General unusual activity that deviates from normal patterns
 - **Unknown Visitor**: An unrecognized person lingering in the scene
 - **Abnormal Activity**: Specific suspicious activities like loitering in restricted areas
+- **AI Insights**: System reasoning and recommendations
 - **Status Events**: Plugin status updates like "Learning Complete"
 
 ### Viewing Alerts
@@ -134,7 +159,18 @@ When an anomaly is detected:
 1. The camera will appear in the Alarm Layout (if configured in Event Rules)
 2. The detected object will be highlighted with a bounding box
 3. Event details will be available in the Nx Meta event log
-4. Automated responses will be triggered according to your rules
+4. AI reasoning and recommendations will be displayed
+5. Automated responses will be triggered according to your rules
+
+## Documentation
+
+Detailed documentation is available in the `docs` directory:
+
+- [Agent Architecture](docs/agent_architecture.md): System design and component interaction
+- [LLM Integration Guide](docs/llm_integration.md): Setting up and configuring LLM capabilities
+- [Operator Manual](docs/operator_manual.md): Comprehensive usage instructions
+- [Installation Guide](docs/installation_guide.md): Detailed setup instructions
+- [Developer Guide](docs/developer_guide.md): Information for developers
 
 ## Support and Feedback
 
