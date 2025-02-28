@@ -56,7 +56,7 @@ sudo apt-get update
 sudo apt-get install -y build-essential cmake libopencv-dev nlohmann-json3-dev libcurl4-openssl-dev
 
 # Clone repository
-git clone https://github.com/nx-agent/nx-agent-plugin.git
+https://github.com/djodom1134/NxAgent.git
 cd nx-agent-plugin
 
 # Create build directory
